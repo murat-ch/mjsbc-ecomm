@@ -1,7 +1,13 @@
 const express = require('express');
-
+const bodyParser = require('body-parser');
 
 const app = express();
+
+// To avoid copy paste bodyParser in every router
+// body Parser transform byte representation of req options to object and puts it to req body
+//bodyParser do not applies to GET requests
+// Every router handler will be body parsed
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
     res.send(`
@@ -16,26 +22,10 @@ app.get('/', (req, res) => {
     `);
 });
 
-// Extract form  parsing as a middleware
-const bodyParser = (req, res, next) => {
-    if (req.method = 'POST') {
-        req.on('data', data => {
-            const parsed = data.toString('utf8').split('&');
-            const formData = {};
-            for (let pair of parsed) {
-                const [key, value] = pair.split('=');
-                formData[key] = value;
-            }
-            req.body = formData;
-            next();
-        });
-    } else {
-        next();
-    }
 
-};
 
-app.post('/', bodyParser, (req, res) => {
+// Move middleware function to app.use()
+app.post('/',(req, res) => {
     console.log(req.body);
     res.send('Account created');
 });
