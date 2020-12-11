@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const userRepo = require('./repositories/users');
 const app = express();
 
 // To avoid copy paste bodyParser in every router
@@ -25,9 +25,17 @@ app.get('/', (req, res) => {
 
 
 // Move middleware function to app.use()
-app.post('/',(req, res) => {
-    console.log(req.body);
-    res.send('Account created');
+app.post('/',async (req, res) => {
+const { email, password, passwordConfirmation } = req.body;
+const existingUser = await userRepo.getOneBy({ email });
+if (existingUser) {
+    return res.send('email in use');
+}
+if (password !== passwordConfirmation) {
+    return res.send('Passwords must match');
+}
+
+res.send('Account created');
 });
 
 app.listen(3000, () => {
