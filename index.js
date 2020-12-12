@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRepo = require('./repositories/users');
+const cookieSession = require('cookie-session');
+
 const app = express();
 
 // To avoid copy paste bodyParser in every router
@@ -8,10 +10,14 @@ const app = express();
 //bodyParser do not applies to GET requests
 // Every router handler will be body parsed
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieSession({
+    keys: ['qwerty']
+}));
 
 app.get('/', (req, res) => {
     res.send(`
     <div>
+    Your Id is: ${req.session.userId}
     <form method="post">
         <input name="email" placeholder="email"/>
         <input name="password" placeholder="password"/>
@@ -26,16 +32,23 @@ app.get('/', (req, res) => {
 
 // Move middleware function to app.use()
 app.post('/',async (req, res) => {
-const { email, password, passwordConfirmation } = req.body;
-const existingUser = await userRepo.getOneBy({ email });
-if (existingUser) {
-    return res.send('email in use');
-}
-if (password !== passwordConfirmation) {
-    return res.send('Passwords must match');
-}
+    const { email, password, passwordConfirmation } = req.body;
+    const existingUser = await userRepo.getOneBy({ email });
+    if (existingUser) {
+        return res.send('email in use');
+    }
+    if (password !== passwordConfirmation) {
+        return res.send('Passwords must match');
+    }
 
-res.send('Account created');
+    // Create a user in our repo to represent this person
+    const user = await userRepo.create({ email, password });
+
+    // Store the id of that user inside the users cookie
+    /// Added by cookie session! > req.session === {}
+    req.session.userId = user.id;
+
+    res.send('Account created');
 });
 
 app.listen(3000, () => {

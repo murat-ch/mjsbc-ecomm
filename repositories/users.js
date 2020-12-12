@@ -28,6 +28,7 @@ class UsersRepository {
         records.push(attrs);
         //write the updated 'records' array back to this.filename
         await this.writeAll(records);
+        return attrs;
     }
 
     async writeAll(records) {
