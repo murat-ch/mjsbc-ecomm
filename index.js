@@ -14,7 +14,7 @@ app.use(cookieSession({
     keys: ['qwerty']
 }));
 
-app.get('/', (req, res) => {
+app.get('/signup', (req, res) => {
     res.send(`
     <div>
     Your Id is: ${req.session.userId}
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 
 
 // Move middleware function to app.use()
-app.post('/',async (req, res) => {
+app.post('/signup',async (req, res) => {
     const { email, password, passwordConfirmation } = req.body;
     const existingUser = await userRepo.getOneBy({ email });
     if (existingUser) {
@@ -49,6 +49,27 @@ app.post('/',async (req, res) => {
     req.session.userId = user.id;
 
     res.send('Account created');
+});
+
+app.get('/signout', (req, res) => {
+    req.session = null;
+    res.send('You are log out');
+});
+
+app.get('signin', (req, res) => {
+    res.send(`
+    <div>
+    <form method="post">
+        <input name="email" placeholder="email"/>
+        <input name="password" placeholder="password"/>
+    <button>Sign In</button>
+    </form>
+    </div>
+    `);
+})
+
+app.post('/signin', async (req, res) => {
+
 });
 
 app.listen(3000, () => {
