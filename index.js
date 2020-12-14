@@ -56,7 +56,7 @@ app.get('/signout', (req, res) => {
     res.send('You are log out');
 });
 
-app.get('signin', (req, res) => {
+app.get('/signin', (req, res) => {
     res.send(`
     <div>
     <form method="post">
@@ -69,7 +69,20 @@ app.get('signin', (req, res) => {
 })
 
 app.post('/signin', async (req, res) => {
-
+    let { email, password } = req.body;
+    const user = await userRepo.getOneBy({ email });
+    if (!user) {
+        return res.send('Email not found');
+    }
+    const validPassword = await userRepo.comparePasswords(
+        user.password,
+        password
+    )
+    if (!validPassword) {
+        return res.send('Invalid password');
+    }
+    req.session.userId = user.id;
+    res.send('You are signed in!!!');
 });
 
 app.listen(3000, () => {
