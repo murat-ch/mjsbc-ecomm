@@ -8,5 +8,20 @@
     "email": "test@gmail.com",
     "password": "b7ee519ba84e3faea81cf50df4f7df70ebcbfb060970b66030a74f1fdfd6692099cac3d092aae4038d4168a0db1db0c37025aac92f8875251e37e484f8e2f8cc.2f74bdf73f3f68ed",
     "id": "9eca166d"
+  },
+  {
+    "email": "cmm1@gmail.com",
+    "password": "985b4ab83e54dcb3bcdc224709e5127bb0a0dcc54b71e3e8f2e675db00e1032d977d7a54d2cf0e697cd03972bdbbb4538ec6b2cb84d222b145396fbf3e8cf1cf.1760635243ace1f3",
+    "id": "f90fa7b7"
+  },
+  {
+    "email": "cmm2@gmail.com",
+    "password": "a2990b4c39d5970b4b11c859fd46e39e8c1b4337a53855712fcf2eaebdca4c72e03ac095ff97428c9b22dd68148405f08452728bc67b62c41fb2638bb76502e5.5e82c9e6a702bcc0",
+    "id": "928b62b2"
+  },
+  {
+    "email": "cmm3@gmail.com",
+    "password": "17fc4267ba96f4f786a69967d89598652a154547a4c46520f1c7bdbb0070fcefa9d2fecf5c40d79906fc64b230fdd2fe326f69ea355d3d1acf1933deffabe7ac.aff0d8f996a0c003",
+    "id": "43ea9672"
   }
 ]
