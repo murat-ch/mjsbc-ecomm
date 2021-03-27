@@ -3,39 +3,38 @@ const userRepo = require('../../repositories/users');
 
 module.exports = {
     requireTitle: check('title')
-            .trim()
-            .isLength({ min: 5, max: 20 }),
+        .trim()
+        .isLength({ min: 5, max: 20 })
+        .withMessage('Must be between 5 and 20 characters'),
     requirePrice: check('price')
         .trim()
         .toFloat()
-        .isFloat({ min: 1 }),
-    requireEmail:
-        check('email')
-            .trim()
-            .normalizeEmail()
-            .isEmail()
-            .withMessage('Must be a valid email')
-            // Using custom validation to check email being in use already
-            .custom(async (email) => {
-                const existingUser = await userRepo.getOneBy({ email });
-                if (existingUser) {
-                    throw new Error('Email in use');
-                }
-            }),
-    requirePassword:
-        check('password')
-            .trim()
-            .isLength({ min:4, max: 20 })
-            .withMessage('Must be between 4 and 20 characters'),
-    requirePasswordConfirmation:
-        check('passwordConfirmation')
-            .trim()
-            .isLength({ min: 4, max: 20 })
-            .custom(async (passwordConfirmation, { req }) => {
-                if (passwordConfirmation !== req.body.password) {
-                    throw new Error('Password confirmation does not match password');
-                }
-            }),
+        .isFloat({ min: 1 })
+        .withMessage('Must be a number greater than 1'),
+    requireEmail: check('email')
+        .trim()
+        .normalizeEmail()
+        .isEmail()
+        .withMessage('Must be a valid email')
+        // Using custom validation to check email being in use already
+        .custom(async (email) => {
+            const existingUser = await userRepo.getOneBy({ email });
+            if (existingUser) {
+                throw new Error('Email in use');
+            }
+        }),
+    requirePassword: check('password')
+        .trim()
+        .isLength({ min:4, max: 20 })
+        .withMessage('Must be between 4 and 20 characters'),
+    requirePasswordConfirmation: check('passwordConfirmation')
+        .trim()
+        .isLength({ min: 4, max: 20 })
+        .custom(async (passwordConfirmation, { req }) => {
+            if (passwordConfirmation !== req.body.password) {
+                throw new Error('Password confirmation does not match password');
+            }
+        }),
     requireEmailExists: check('email')
         .trim()
         .normalizeEmail()
