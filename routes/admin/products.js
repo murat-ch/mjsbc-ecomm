@@ -1,7 +1,7 @@
 const express = require('express');
-const { validationResult } = require('express-validator');
 // multer for use with multipart enctype in form
 const multer = require('multer');
+const { handleErrors } = require('./middleware');
 const productsRepo = require('../../repositories/products');
 const productsNewTemplate = require('../../views/admin/products/new');
 const { requireTitle, requirePrice } = require('./validators');
@@ -18,12 +18,8 @@ router.get('/admin/products', (req, res) => {
 router.post('/admin/products/new',
     upload.single('image'),
     [requireTitle, requirePrice],
+    handleErrors(productsNewTemplate),
     async (req, res) => {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.send(productsNewTemplate( { errors }));
-        }
 
         // image is storing in buffer
         const image = req.file.buffer.toString('base64');
